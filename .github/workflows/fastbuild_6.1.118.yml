@@ -301,6 +301,9 @@ jobs:
             cd ./common
             patch -p1 -F 3 < 50_add_susfs_in_gki-${{ env.ANDROID_VERSION }}-${{ env.KERNEL_VERSION }}.patch || true
             patch -p1 -N -F 3 < 69_hide_stuff.patch || true
+            if [[ ${{ github.event.inputs.ksu_type }} != "ksu" ]]; then
+              echo "struct selinux_state fake_state;" >> ./security/selinux/selinuxfs.c
+            fi
             cd ..
           else
             echo "已选择无内置KernelSU模式，跳过susfs配置..."
